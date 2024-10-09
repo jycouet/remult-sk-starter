@@ -1,1 +1,1 @@
-export { handle } from "./modules/auth/server.ts";
+export { handle } from "./modules/auth/server";

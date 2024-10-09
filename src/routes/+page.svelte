@@ -1,6 +1,5 @@
 <script>
   import CheckAuth from "../modules/auth/svelte/CheckAuth.svelte";
-  import Todo from "../demo/todo/Todo.svelte";
 </script>
 
 <h1>Welcome to remult-sk-starter!</h1>
@@ -14,5 +13,4 @@
   </li>
   <li><CheckAuth /></li>
   <li>Admin: <a href="/api/admin">Admin</a></li>
-  <li><Todo /></li>
 </ul>

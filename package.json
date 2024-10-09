@@ -11,6 +11,10 @@
   },
   "devDependencies": {
     "@auth/sveltekit": "^1.5.0",
+    "@aws-sdk/client-s3": "^3.666.0",
+    "@aws-sdk/s3-request-presigner": "^3.666.0",
+    "@aws-sdk/util-create-request": "^3.666.0",
+    "@aws-sdk/util-format-url": "^3.664.0",
     "@node-rs/argon2": "^1.8.3",
     "@sveltejs/adapter-auto": "^3.0.0",
     "@sveltejs/kit": "^2.0.0",

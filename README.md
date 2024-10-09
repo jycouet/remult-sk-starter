@@ -50,3 +50,15 @@ Make sure you have the following installed on your machine:
   ```bash
   npm run start
   ```
+
+## Tips
+
+```
+cd src/modules
+mkdir media
+cd media
+npx degit jycouet/remult-upload/src/server/modules/media
+
++ pck
++ env
+```
