@@ -48,7 +48,18 @@ const authConfig: SvelteKitAuthConfig = {
     //       return null; // If credentials are invalid, return null
     //     }),
     // }),
-    GitHub,
+    GitHub({
+      authorization: { params: { scope: "read:user user:email" } },
+      profile(profile) {
+        // return profile;
+        return {
+          id: profile.id.toString(),
+          name: profile.name ?? profile.login,
+          email: profile.email,
+          image: profile.avatar_url,
+        };
+      },
+    }),
   ],
   callbacks: {
     signIn: (arg) =>
@@ -68,6 +79,16 @@ const authConfig: SvelteKitAuthConfig = {
             providerType: arg.account?.type, // Store the type of OAuth provider (e.g., GitHub)
             provider: arg.account?.provider || "",
             providerAccountId: arg.account?.providerAccountId || "",
+
+            email: arg.profile?.email || "",
+            avatar_url: arg.user?.image || "",
+            metadata: arg.profile ?? undefined,
+          });
+        } else {
+          await repo(User).update(user, {
+            email: arg.profile?.email || "",
+            avatar_url: arg.user?.image || "",
+            metadata: arg.profile ?? undefined,
           });
         }
         arg.user!.id = user.id; // Set the user's ID in the session
@@ -98,5 +119,6 @@ export async function getUserFromRequest(
     id: user.id,
     name: user.name,
     roles: user.admin ? [Roles.admin] : [], // Return roles based on admin status
+    avatar_url: user.avatar_url,
   };
 }

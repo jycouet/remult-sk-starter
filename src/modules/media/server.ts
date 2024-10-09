@@ -7,12 +7,13 @@ import {
 // @ts-ignore
 import { Buffer } from "node:buffer";
 import {
-  S3_ACCESS_KEY_ID,
-  S3_ACCESS_KEY_SECRET,
-  S3_BUCKET_NAME,
-  S3_ENDPOINT,
-  S3_REGION,
-} from "$env/static/private";
+  // S3_ACCESS_KEY_ID,
+  // S3_ACCESS_KEY_SECRET,
+  // S3_BUCKET_NAME,
+  // S3_ENDPOINT,
+  // S3_REGION,
+  env,
+} from "$env/dynamic/private";
 import { S3RequestPresigner } from "@aws-sdk/s3-request-presigner";
 import { createRequest } from "@aws-sdk/util-create-request";
 import { formatUrl } from "@aws-sdk/util-format-url";
@@ -21,12 +22,12 @@ import type { Module } from "../../server/api";
 
 const getClient = () => {
   return new S3Client({
-    endpoint: S3_ENDPOINT,
+    endpoint: env.S3_ENDPOINT,
     credentials: {
-      accessKeyId: S3_ACCESS_KEY_ID,
-      secretAccessKey: S3_ACCESS_KEY_SECRET,
+      accessKeyId: env.S3_ACCESS_KEY_ID ?? "",
+      secretAccessKey: env.S3_ACCESS_KEY_SECRET ?? "",
     },
-    region: S3_REGION,
+    region: env.S3_REGION,
   });
 };
 
@@ -44,7 +45,7 @@ export async function base64ToS3(key: string, data: string) {
   const buffer = Buffer.from(split[1], "base64");
   const result = await s3Client.send(
     new PutObjectCommand({
-      Bucket: S3_BUCKET_NAME,
+      Bucket: env.S3_BUCKET_NAME,
       Key: key,
       ContentType: type,
       Body: buffer,
@@ -67,7 +68,7 @@ export const getFromS3 = async (key: string) => {
   const signer = new S3RequestPresigner({ ...s3Client.config });
   const writeRequest = await createRequest(
     s3Client,
-    new GetObjectCommand({ Bucket: S3_BUCKET_NAME, Key: key })
+    new GetObjectCommand({ Bucket: env.S3_BUCKET_NAME, Key: key })
   );
   return { url: formatUrl(await signer.presign(writeRequest)) };
 };
@@ -77,7 +78,7 @@ export const deleteInS3 = async (key: string) => {
 
   const result = await s3Client.send(
     new DeleteObjectCommand({
-      Bucket: S3_BUCKET_NAME,
+      Bucket: env.S3_BUCKET_NAME,
       Key: key,
     })
   );

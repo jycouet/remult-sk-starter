@@ -2,13 +2,14 @@ import { remultSveltekit } from "remult/remult-sveltekit";
 import { createPostgresDataProvider } from "remult/postgres";
 import { DATABASE_URL } from "$env/static/private";
 import { building } from "$app/environment";
-import { User } from "../modules/auth";
-import { getUserFromRequest } from "../modules/auth/server";
+import { Roles, User } from "$modules/auth";
+import { getUserFromRequest } from "$modules/auth/server";
 import type { ClassType } from "remult";
-import { media } from "../modules/media/server";
+import { media } from "$modules/media/server";
 
 export const api = remultSveltekit({
   admin: true,
+  // admin: Roles.admin,
   entities: [...media.entities, User],
   getUser: getUserFromRequest,
   initApi: async () => {

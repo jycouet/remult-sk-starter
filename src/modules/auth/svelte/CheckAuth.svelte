@@ -1,19 +1,14 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { remult, type UserInfo } from "remult";
-
-  let user: UserInfo | undefined | "loading" = "loading";
-
-  onMount(async () => {
-    user = await remult.initUser();
-  });
+  import { remult } from "remult";
 </script>
 
-{#if user === "loading"}
+{#if !remult.user}
   <div>Auth: ⌛</div>
 {:else if remult.authenticated()}
   <div>
     Auth:✅ Hello {remult.user?.name}
+    <pre>{JSON.stringify(remult.user)}</pre>
+    <img src={remult.user.avatar_url} alt="Avatar" width="50" />
     <a href="/auth/signout">Sign Out</a>
   </div>
 {:else}

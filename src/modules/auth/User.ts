@@ -2,6 +2,7 @@ import { Entity, Fields, remult, repo, Validators } from "remult";
 import type { hash } from "@node-rs/argon2";
 import type { ProviderType } from "./server.ts";
 import { Roles } from "./Roles";
+import type { GitHubProfile } from "@auth/sveltekit/providers/github";
 
 @Entity("users", {
   allowApiCrud: remult.authenticated, // Only authenticated users can perform CRUD operations
@@ -38,6 +39,7 @@ export class User {
   // updatePassword = ""; // Placeholder field for password updates, not persisted directly
 
   @Fields.boolean({
+    includeInApi: Roles.admin,
     allowApiUpdate: Roles.admin, // Only admins can update this field
   })
   admin = false;
@@ -74,4 +76,13 @@ export class User {
   //       },
   //     ]);
   // }
+
+  @Fields.string({ includeInApi: Roles.admin })
+  email = "";
+
+  @Fields.string()
+  avatar_url = "";
+
+  @Fields.json({ includeInApi: Roles.admin })
+  metadata: Record<any, any> | undefined = undefined;
 }

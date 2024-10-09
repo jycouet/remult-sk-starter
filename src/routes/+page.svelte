@@ -1,5 +1,5 @@
 <script>
-  import CheckAuth from "../modules/auth/svelte/CheckAuth.svelte";
+  import CheckAuth from "$modules/auth/svelte/CheckAuth.svelte";
 </script>
 
 <h1>Welcome to remult-sk-starter!</h1>
