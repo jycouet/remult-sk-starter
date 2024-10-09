@@ -16,9 +16,7 @@ const PAGES = {
  * SERVERS
  */
 const SERVERS = {
-  "_api /api/[...remult]": (params: { remult: (string | number)[] }) => {
-    return `/api/${params.remult?.join('/')}`
-  }
+  
 }
 
 /**
@@ -133,8 +131,8 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 */
 export type KIT_ROUTES = {
   PAGES: { '/': never }
-  SERVERS: { '_api /api/[...remult]': 'remult' }
+  SERVERS: Record<string, never>
   ACTIONS: Record<string, never>
   LINKS: Record<string, never>
-  Params: { remult: never }
+  Params: Record<string, never>
 }

@@ -1,5 +1,5 @@
 <script>
-  import CheckAuth from "../demo/auth/CheckAuth.svelte";
+  import CheckAuth from "../modules/auth/svelte/CheckAuth.svelte";
   import Todo from "../demo/todo/Todo.svelte";
 </script>
 

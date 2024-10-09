@@ -1,6 +1,6 @@
 import { Entity, Fields, remult, repo, Validators } from "remult";
 import type { hash } from "@node-rs/argon2";
-import type { ProviderType } from "../../modules/auth/server.ts";
+import type { ProviderType } from "./server.ts";
 import { Roles } from "./Roles";
 
 @Entity("users", {

@@ -5,8 +5,8 @@ import GitHub from "@auth/sveltekit/providers/github";
 import type { RequestEvent } from "@sveltejs/kit";
 import { repo, withRemult, type UserInfo } from "remult";
 import { verify, hash } from "@node-rs/argon2";
-import { User } from "../demo/auth/User";
-import { Roles } from "../demo/auth/Roles";
+import { User } from "./User";
+import { Roles } from "./Roles";
 
 // Assign the password hashing function to User's static method
 User.hashPassword = hash;
@@ -14,40 +14,40 @@ User.hashPassword = hash;
 // Configuration for Auth.js
 const authConfig: SvelteKitAuthConfig = {
   providers: [
-    Credentials({
-      credentials: {
-        name: {
-          type: "text", // The input field for username
-          placeholder: "Try Jane (Jane123) or Steve(Steve123)", // Instructional placeholder for demo purposes
-        },
-        password: {
-          type: "password", // The input field for password
-        },
-      },
-      authorize: (credentials) =>
-        // This function runs when a user tries to sign in
-        withRemult(async () => {
-          // The withRemult function provides the current Remult context (e.g., repository, authenticated user, etc.)
-          // to any Remult-related operations inside this block. This ensures that `remult` functions such as
-          // repository queries or checking user permissions can be executed correctly within the request's context.
-          const user = await repo(User).findFirst({
-            // Find a user by their name and provider type (credentials-based auth)
-            name: credentials.name as string,
-            providerType: "credentials",
-          });
+    // Credentials({
+    //   credentials: {
+    //     name: {
+    //       type: "text", // The input field for username
+    //       placeholder: "Try Jane (Jane123) or Steve(Steve123)", // Instructional placeholder for demo purposes
+    //     },
+    //     password: {
+    //       type: "password", // The input field for password
+    //     },
+    //   },
+    //   authorize: (credentials) =>
+    //     // This function runs when a user tries to sign in
+    //     withRemult(async () => {
+    //       // The withRemult function provides the current Remult context (e.g., repository, authenticated user, etc.)
+    //       // to any Remult-related operations inside this block. This ensures that `remult` functions such as
+    //       // repository queries or checking user permissions can be executed correctly within the request's context.
+    //       const user = await repo(User).findFirst({
+    //         // Find a user by their name and provider type (credentials-based auth)
+    //         name: credentials.name as string,
+    //         providerType: "credentials",
+    //       });
 
-          // If a matching user is found and the password is valid
-          if (
-            user &&
-            (await verify(user.password, credentials.password as string))
-          ) {
-            return {
-              id: user.id, // Return the user's ID as part of the session
-            };
-          }
-          return null; // If credentials are invalid, return null
-        }),
-    }),
+    //       // If a matching user is found and the password is valid
+    //       if (
+    //         user &&
+    //         (await verify(user.password, credentials.password as string))
+    //       ) {
+    //         return {
+    //           id: user.id, // Return the user's ID as part of the session
+    //         };
+    //       }
+    //       return null; // If credentials are invalid, return null
+    //     }),
+    // }),
     GitHub,
   ],
   callbacks: {
@@ -88,7 +88,7 @@ const authConfig: SvelteKitAuthConfig = {
 export const { handle } = SvelteKitAuth(authConfig);
 export type { ProviderType }; // Export ProviderType for use in `User.providerType`
 export async function getUserFromRequest(
-  req: RequestEvent,
+  req: RequestEvent
 ): Promise<UserInfo | undefined> {
   const session = await req.locals.auth(); // Get the session from the request
   if (!session?.user?.id) return undefined; // If no session or user ID, return undefined
